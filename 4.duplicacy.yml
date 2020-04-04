@@ -33,7 +33,7 @@
     url: "https://github.com/gilbertchen/duplicacy/releases/download/v{{ duplicacy_cli_version}}/duplicacy_{{ os_arch_cli }}_{{ duplicacy_cli_version }}"
     dest: /usr/local/bin/duplicacy
     checksum: sha256:30fd0d5bcdd2edefab93565fad7d11d374461d2b77129a1134ccf0b106332a63
-    mode: 0500
+    mode: 0555
   vars:
     duplicacy_cli_version: 2.4.1
     os_arch_cli: linux_arm # linux_arm freebsd_x64 linux_arm64 linux_arm linux_i386 linux_x64 osx_x64
