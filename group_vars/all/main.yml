@@ -1,0 +1,23 @@
+---
+# My ISP BOX
+my_box_address: 192.168.0.1
+
+# Raspberry settings
+my_ip_address: 192.168.0.254
+my_hostname: jarvis
+my_timezone: Europe/Paris
+my_locale: fr_FR
+
+
+# Pihole - DNS relay with blacklist
+dns1: 1.1.1.1
+dns2: 1.0.0.1
+
+# Radicale - Cardav / Caldav server
+radicale_port: 5232
+
+radicale_account_name: radicale
+radicale_account_password: radicale
+
+# Duplicacy - backup solution
+duplicacy_port: 3875

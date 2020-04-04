@@ -1,0 +1,11 @@
+[Unit]
+Description=Duplicacy backup software`
+
+[Service]
+ExecStart=/usr/local/bin/duplicacy-web
+Restart=on-failure
+RestartSec=30
+User=root
+
+[Install]
+WantedBy=multi-user.target

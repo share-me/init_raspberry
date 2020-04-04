@@ -1,0 +1,19 @@
+[auth]
+type = htpasswd
+htpasswd_filename = ~/.config/radicale/users
+htpasswd_encryption = bcrypt 
+
+# Average delay after failed login attempts in seconds
+delay = 10 
+
+[storage]
+filesystem_folder = ~/.config/radicale/collections
+
+[server]
+hosts = {{ my_ip_address }}:{{ radicale_port }}
+max_connections = 2
+max_content_length = 10000000 
+timeout = 10 
+
+[logging] 
+config = ~/.config/radicale/logs.conf

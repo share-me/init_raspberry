@@ -1,0 +1,4 @@
+{
+    "listening_address": "{{ my_ip_address }}:{{ duplicacy_port }}",
+    "dark_mode": false
+}

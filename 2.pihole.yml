@@ -1,0 +1,41 @@
+---
+
+- name: Copy pihole configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}{{ item.src | basename }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - { src: pihole/01-pihole.conf, dest: /etc/dnsmasq.d/, mode: '0644', owner: pi, group: pi }
+    - { src: pihole/setupVars.conf, dest: /etc/pihole/, mode: '0644', owner: pi, group: pi }
+
+
+- name: create a pihole container on port 80
+  become_user: pi
+  docker_container:
+    name: pihole
+    image: pihole/pihole:latest
+    state: started
+    env:
+      TZ: "{{ my_timezone }}"
+      DNS1: "{{ dns1 }}"
+      DNS2: "{{ dns2 }}"
+      ServerIP: "{{ my_ip_address}}"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+      - "443:443/tcp"
+    volumes:
+      - "/etc/pihole/:/etc/pihole/"
+      - "/etc/dnsmasq.d/:/etc/dnsmasq.d/"
+    dns_servers:
+      - 127.0.0.1
+      - "{{ dns1 }}"
+    capabilities:
+      - NET_ADMIN
+    network_mode: host
+    restart_policy: 'unless-stopped'

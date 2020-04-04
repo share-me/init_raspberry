@@ -1,0 +1,28 @@
+---
+
+- name: restart network
+  service:
+    name:
+      - dhcpcd
+      - networking
+    state: restarted
+
+
+- name: restart Docker
+  service:
+    name: docker
+    state: restarted
+
+
+- name: restart Radicale
+  service:
+    name: radicale
+    enabled: true
+    state: restarted
+
+
+- name: restart Duplicacy Web Server
+  service:
+    name: duplicacy
+    enabled: true
+    state: started
