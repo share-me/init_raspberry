@@ -1,5 +1,8 @@
 # What will be installed ?
 
+Init your raspberry from scratch!  
+If you're interested by only one software, partial installation can be done (see installation section below)
+
 - 0.system_configuration.yml  # Basic configuration (IP, keyboard layout, timezone, hostname, network, ...)
 - 1.docker.yml                # Prerequisite to run other apps (Pihole, ...)
 - 2.pihole.yml                # Local DNS, filters advertisements on local network
@@ -102,6 +105,8 @@ Access Pihole interface http://your.raspberry.ip.address
 ---
 
 After installation:
+
+Get pihole default password with `docker logs pihole | grep password`
 
 1. Connect to your ISP box, disable DHCP server
 2. Connect to your Pihole interface, enable DHCP server

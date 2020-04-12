@@ -4,7 +4,6 @@
   get_url:
     url: "https://acrosync.com/duplicacy-web/duplicacy_web_{{ os_arch_web }}_{{ duplicacy_web_version }}"
     dest: /usr/local/bin/duplicacy-web
-    checksum: sha256:30fd83948764f74b39be5d32b5e4d5ff97986cdaa4254ce8c6344aaf495c5597
     mode: 0500
   vars:
     duplicacy_web_version: 1.2.1
@@ -32,8 +31,7 @@
   get_url:
     url: "https://github.com/gilbertchen/duplicacy/releases/download/v{{ duplicacy_cli_version}}/duplicacy_{{ os_arch_cli }}_{{ duplicacy_cli_version }}"
     dest: /usr/local/bin/duplicacy
-    checksum: sha256:30fd0d5bcdd2edefab93565fad7d11d374461d2b77129a1134ccf0b106332a63
     mode: 0555
   vars:
-    duplicacy_cli_version: 2.4.1
+    duplicacy_cli_version: 2.5.0
     os_arch_cli: linux_arm # linux_arm freebsd_x64 linux_arm64 linux_arm linux_i386 linux_x64 osx_x64
