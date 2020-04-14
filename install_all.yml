@@ -4,19 +4,19 @@
   become: yes
   gather_facts: false
   tasks:
-    - import_tasks: 0.system_configuration.yml
+    - import_playbook: 0.system_configuration.yml
       tags: [system_configuration]
 
-    - import_tasks: 1.docker.yml
+    - import_playbook: 1.docker.yml
       tags: [docker,pihole]
 
-    - import_tasks: 2.pihole.yml
+    - import_playbook: 2.pihole.yml
       tags: [pihole]
 
-    - import_tasks: 3.radicale.yml
+    - import_playbook: 3.radicale.yml
       tags: [radicale]
 
-    - import_tasks: 4.duplicacy.yml
+    - import_playbook: 4.duplicacy.yml
       tags: [duplicacy]
 
 ...

@@ -1,67 +1,70 @@
 ---
-
-- name: Add packages prerequisites
-  package:
-    name:  apache2-utils
-    state: present
-
-
-- name: Add user 'radicale'
-  user:
-    name: radicale
-    password: $6$mysecretsalt$9nQl7uSP.U5lQhRu/ZcCf/abvxUnWvDZMrTrbXMpXmQoA5gDmd4DYkIs/4gu5imDCD.UkGQG84jaSLhVeU8/C0
-    uid: 1001
-    shell: /bin/bash
+- hosts: localhost
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: Add packages prerequisites
+      package:
+        name:  apache2-utils
+        state: present
 
 
-- name: Install Radicale application
-  pip:
-    name: ['radicale', 'radicale[bcrypt]', 'passlib[bcrypt]']
-    state: present
-    extra_args: --user radicale
+    - name: Add user 'radicale'
+      user:
+        name: radicale
+        password: $6$mysecretsalt$9nQl7uSP.U5lQhRu/ZcCf/abvxUnWvDZMrTrbXMpXmQoA5gDmd4DYkIs/4gu5imDCD.UkGQG84jaSLhVeU8/C0
+        uid: 1001
+        shell: /bin/bash
 
 
-- name: Create directories
-  file:
-    path: "{{ item }}"
-    owner: radicale
-    group: radicale
-  with_items:
-    - /var/log/radicale/
-    - /home/radicale/.config/radicale/
-    - /home/radicale/.config/systemd/user/
+    - name: Install Radicale application
+      pip:
+        name: ['radicale', 'radicale[bcrypt]', 'passlib[bcrypt]']
+        state: present
+        extra_args: --user radicale
 
 
-- name: Copy logging configuration
-  copy:
-    src: radicale/logs.conf
-    dest: /home/radicale/.config/radicale/logs.conf
-    owner: radicale
-    group: radicale
-  notify: restart Radicale
+    - name: Create directories
+      file:
+        path: "{{ item }}"
+        owner: radicale
+        group: radicale
+      with_items:
+        - /var/log/radicale/
+        - /home/radicale/.config/radicale/
+        - /home/radicale/.config/systemd/user/
 
-- name: Copy main configuration file
-  template:
-    src: radicale/config
-    dest: ~radicale/.config/radicale/config
-    owner: radicale
-    group: radicale
-    mode: 0600
-  notify: restart Radicale
 
-- name: On Radicale server, add your Cardav/Caldav account ({{ radicale_account_name }})
-  htpasswd:
-    path: /home/radicale/.config/radicale/users
-    name: "{{ radicale_account_name }}"
-    create: yes
-    password: "{{ radicale_account_password }}"
-    owner: radicale
-    group: radicale
-    crypt_scheme: apr_md5_crypt
-    mode: 0640
-  notify: restart Radicale
+    - name: Copy logging configuration
+      copy:
+        src: radicale/logs.conf
+        dest: /home/radicale/.config/radicale/logs.conf
+        owner: radicale
+        group: radicale
+      notify: restart Radicale
 
-- name: Copy systemd service file (port {{ radicale_port}})
-  copy:
-    src: radicale/radicale.service
-    dest: /lib/systemd/system/radicale.service
+    - name: Copy main configuration file
+      template:
+        src: radicale/config
+        dest: ~radicale/.config/radicale/config
+        owner: radicale
+        group: radicale
+        mode: 0600
+      notify: restart Radicale
+
+    - name: On Radicale server, add your Cardav/Caldav account ({{ radicale_account_name }})
+      htpasswd:
+        path: /home/radicale/.config/radicale/users
+        name: "{{ radicale_account_name }}"
+        create: yes
+        password: "{{ radicale_account_password }}"
+        owner: radicale
+        group: radicale
+        crypt_scheme: apr_md5_crypt
+        mode: 0640
+      notify: restart Radicale
+
+    - name: Copy systemd service file (port {{ radicale_port}})
+      copy:
+        src: radicale/radicale.service
+        dest: /lib/systemd/system/radicale.service

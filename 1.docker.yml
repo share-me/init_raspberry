@@ -1,32 +1,36 @@
 ---
+- hosts: localhost
+  become: yes
+  gather_facts: false
+  tasks:
+  
+    # Install Docker
+    # https://docs.docker.com/install/linux/docker-ce/debian/
+    # Docker by apt-get is not compatible with Raspbian
 
-# Install Docker
-# https://docs.docker.com/install/linux/docker-ce/debian/
-# Docker by apt-get is not compatible with Raspbian
-
-- name: Install python docker module
-  pip:
-    name: docker-py
-
-
-- name: Download Docker install script
-  get_url:
-    url: https://get.docker.com
-    dest: /tmp/get-docker.sh
-  register: downloaded
+    - name: Install python docker module
+      pip:
+        name: docker-py
 
 
-- name: Install Docker
-  command: sh /tmp/get-docker.sh
-  when: downloaded.changed
+    - name: Download Docker install script
+      get_url:
+        url: https://get.docker.com
+        dest: /tmp/get-docker.sh
+      register: downloaded
 
 
-- name: Add the user 'pi' to docker group
-  user:
-    name: pi
-    groups: docker
-    append: yes
-  notify: restart Docker
+    - name: Install Docker
+      command: sh /tmp/get-docker.sh
+      when: downloaded.changed
 
 
-- meta: flush_handlers
+    - name: Add the user 'pi' to docker group
+      user:
+        name: pi
+        groups: docker
+        append: yes
+      notify: restart Docker
+
+
+    - meta: flush_handlers

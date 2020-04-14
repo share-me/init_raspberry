@@ -2,7 +2,7 @@
 
 Init your raspberry from scratch!  
 If you're interested by only one software, partial installation can be done (see installation section below)
-
+- install_all.yml             # Install all playbooks below
 - 0.system_configuration.yml  # Basic configuration (IP, keyboard layout, timezone, hostname, network, ...)
 - 1.docker.yml                # Prerequisite to run other apps (Pihole, ...)
 - 2.pihole.yml                # Local DNS, filters advertisements on local network
@@ -74,15 +74,20 @@ cd init_raspberry
 If you want to change default settings (keyboard layout, IP, password, ports used, Radical initial account/password, ...) please modify this file first:  
 - `group_vars/all/main.yml`
 
-Then launch this playbook
+Then launch global playbook
 
 ```shell
-ansible-playbook playbook.yml                               # Install all
-ansible-playbook playbook.yml --tags system_configuration   # Only configure system
-ansible-playbook playbook.yml --tags docker                 # Only install Docker
-ansible-playbook playbook.yml --tags pihole                 # Only install Docker and Pihole
-ansible-playbook playbook.yml --tags radicale               # Only install Radicale
-ansible-playbook playbook.yml --tags duplicacy              # Only install Duplicacy
+ansible-playbook install_all.yml                               # Install all
+ansible-playbook install_all.yml --tags system_configuration   # Only configure system
+ansible-playbook install_all.yml --tags docker                 # Only install Docker
+ansible-playbook install_all.yml --tags pihole                 # Only install Docker and Pihole
+ansible-playbook install_all.yml --tags radicale               # Only install Radicale
+ansible-playbook install_all.yml --tags duplicacy              # Only install Duplicacy
+```
+
+Or to use any playbook directly, by example
+```
+ansible-playbook 2.pihole.yml
 ```
 
 # Softwares

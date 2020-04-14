@@ -1,62 +1,65 @@
 ---
-
-- name: Set hostname -> {{ my_hostname }}
-  hostname:
-    name: "{{ my_hostname }}"
-
-
-- name: Set timezone -> {{ my_timezone }}
-  timezone:
-    name: "{{ my_timezone }}"
+- hosts: localhost
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: Set hostname -> {{ my_hostname }}
+      hostname:
+        name: "{{ my_hostname }}"
 
 
-- name: Set localisation files -> '{{my_locale }}'
-  locale_gen:
-    name: "{{ my_locale }}"
-    state: present
+    - name: Set timezone -> {{ my_timezone }}
+      timezone:
+        name: "{{ my_timezone }}"
 
 
-- name: Generate SSH keys if none is present
-  openssh_keypair:
-    path: ~pi/.ssh/id_rsa
-    size: 4096
-    force: no
-    type: rsa
+    - name: Set localisation files -> '{{my_locale }}'
+      locale_gen:
+        name: "{{ my_locale }}"
+        state: present
 
 
-- name: Copy Raspberry config file
-  copy:
-    src: system_configuration/config.txt
-    dest: /boot/
-    mode: 0755
-    owner: root
-    group: root
+    - name: Generate SSH keys if none is present
+      openssh_keypair:
+        path: ~pi/.ssh/id_rsa
+        size: 4096
+        force: no
+        type: rsa
 
 
-- name: Copy Network configuration files
-  template:
-    src: system_configuration/dhcpcd.conf
-    dest: /etc/dhcpcd.conf
-    owner: root
-    group: netdev
-    mode: '0664'
-  notify: restart network
+    - name: Copy Raspberry config file
+      copy:
+        src: system_configuration/config.txt
+        dest: /boot/
+        mode: 0755
+        owner: root
+        group: root
 
 
-- name: Install missing packages
-  apt:
-    name: "{{ item }}"
-  loop:
-      - ca-certificates
-      - curl
-      - net-tools
-  loop_control:
-    label: "{{ item }}"
+    - name: Copy Network configuration files
+      template:
+        src: system_configuration/dhcpcd.conf
+        dest: /etc/dhcpcd.conf
+        owner: root
+        group: netdev
+        mode: '0664'
+      notify: restart network
 
 
-- name: Create a crontab job to update Raspbian everyday at 02:00
-  cron:
-    name: "OS auto updates"
-    minute: "0"
-    hour: "2"
-    job: "apt-get -y upgrade"
+    - name: Install missing packages
+      apt:
+        name: "{{ item }}"
+      loop:
+          - ca-certificates
+          - curl
+          - net-tools
+      loop_control:
+        label: "{{ item }}"
+
+
+    - name: Create a crontab job to update Raspbian everyday at 02:00
+      cron:
+        name: "OS auto updates"
+        minute: "0"
+        hour: "2"
+        job: "apt-get -y upgrade"
