@@ -27,14 +27,30 @@
         type: rsa
 
 
-    - name: Copy Raspberry config file
-      copy:
-        src: system_configuration/config.txt
-        dest: /boot/
-        mode: 0755
-        owner: root
-        group: root
+    # - name: Copy Raspberry config file
+      # copy:
+        # src: system_configuration/config.txt
+        # dest: /boot/
+        # mode: 0755
+        # owner: root
+        # group: root
 
+
+    - name: Tweak /boot/config.txt
+      ini_file:
+        path: system_configuration/config.txt
+        section: "{{ item.section }}
+        option: "{{ item.option }}
+        value: "{{ item.value }}
+        backup: yes
+        no_extra_spaces: yes
+      loop:
+        - { section: '' , option: 'dtparam=i2c_arm' , value: 'off' }
+        - { section: '' , option: 'dtparam=spi' , value: 'off' }
+        - { section: '' , option: 'dtparam=audio' , value: 'on' }
+        - { section: 'all' , option: 'start_x' , value: 0 }
+        - { section: 'all' , option: 'enable_uart' , value: 0 }
+        - { section: 'all' , option: 'gpu_mem' , value: 16 }
 
     - name: Copy Network configuration files
       template:
@@ -46,6 +62,13 @@
       notify: restart network
 
 
+    - name: Enable sshd service
+      service:
+        name: sshd
+        state: started
+        enabled: yes
+
+     
     - name: Install missing packages
       apt:
         name: "{{ item }}"
