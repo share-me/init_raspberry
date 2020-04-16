@@ -27,21 +27,12 @@
         type: rsa
 
 
-    # - name: Copy Raspberry config file
-      # copy:
-        # src: system_configuration/config.txt
-        # dest: /boot/
-        # mode: 0755
-        # owner: root
-        # group: root
-
-
     - name: Tweak /boot/config.txt
       ini_file:
-        path: system_configuration/config.txt
-        section: "{{ item.section }}
-        option: "{{ item.option }}
-        value: "{{ item.value }}
+        path: /boot/config.txt
+        section: "{{ item.section }}"
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
         backup: yes
         no_extra_spaces: yes
       loop:
