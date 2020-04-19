@@ -1,6 +1,6 @@
 ---
 # My ISP BOX
-my_box_address: 192.168.0.1
+box_ip_address: 192.168.0.1
 
 # Raspberry settings
 my_ip_address: 192.168.0.254
