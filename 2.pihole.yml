@@ -5,7 +5,7 @@
   gather_facts: false
   tasks:
 
-    - import_playbook: 1.docker.yml
+          #- import_playbook: 1.docker.yml
 
       
     - name: Copy pihole configuration files
