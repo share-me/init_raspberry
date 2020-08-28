@@ -43,6 +43,15 @@
         - { section: 'all' , option: 'enable_uart' , value: 0 }
         - { section: 'all' , option: 'gpu_mem' , value: 16 }
 
+    - name: "[system_configuration] Copy /etc/hosts"
+      template:
+        src: system_configuration/hosts.j2
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: '0664'
+      ignore_errors: true
+
     - name: Copy Network configuration files
       template:
         src: system_configuration/dhcpcd.conf
@@ -59,21 +68,20 @@
         state: started
         enabled: yes
 
-     
+
     - name: Install missing packages
       apt:
         name: "{{ item }}"
       loop:
-          - ca-certificates
-          - curl
-          - net-tools
+        - ca-certificates
+        - curl
+        - net-tools
       loop_control:
         label: "{{ item }}"
 
 
-    - name: Create a crontab job to update Raspbian everyday at 02:00
+    - name: Create a crontab job to update Raspbian
       cron:
         name: "OS auto updates"
-        minute: "0"
-        hour: "2"
+        special_time: weekly
         job: "apt-get -y upgrade"

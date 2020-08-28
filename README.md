@@ -42,7 +42,7 @@ sudo raspi-config
 # Install prerequisites (Ansible and Python)
 
 ```shell
-apt-get install -y git ansible python3-pip
+sudo apt-get install -y git ansible python3-pip
 ```
 
 # Download this Ansible playbook (3 options)
@@ -71,8 +71,8 @@ cd init_raspberry
 
 # Installation
 
-If you want to change default settings (keyboard layout, IP, password, ports used, Radical initial account/password, ...) please modify this file first:  
-- `group_vars/all/main.yml`
+If you want to change default settings (keyboard layout, IP, password, ports used, Radical initial account/password, ...) please modify files in:  
+- `group_vars/all/`
 
 Then launch global playbook
 

@@ -5,21 +5,6 @@
   gather_facts: false
   tasks:
 
-          #- import_playbook: 1.docker.yml
-
-      
-    - name: Copy pihole configuration files
-      template:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}{{ item.src | basename }}"
-        owner: "{{ item.owner }}"
-        group: "{{ item.group }}"
-        mode: "{{ item.mode }}"
-      loop:
-        - { src: pihole/01-pihole.conf, dest: /etc/dnsmasq.d/, mode: '0644', owner: pi, group: pi }
-        - { src: pihole/setupVars.conf, dest: /etc/pihole/, mode: '0644', owner: pi, group: pi }
-
-
     - name: create a pihole container on port 80
       become_user: pi
       docker_container:
@@ -47,3 +32,35 @@
           - NET_ADMIN
         network_mode: host
         restart_policy: 'unless-stopped'
+
+    - name: Change pihole settings
+      ini_file:
+        path: "{{ item.file }}"
+        section: null
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        no_extra_spaces: true
+        backup: yes
+      loop:
+        - {  file: /etc/pihole/setupVars.conf, option: PIHOLE_DNS_1  , value: "{{ dns1 }}"  }
+        - {  file: /etc/pihole/setupVars.conf, option: PIHOLE_DNS_2  , value: "{{ dns1 }}" }
+        - {  file: /etc/pihole/setupVars.conf, option: IPV4_ADDRESS  , value: "{{ my_ip_address }}" }
+        - {  file: /etc/pihole/setupVars.conf, option: DHCP_START    , value: 192.168.0.2 }
+        - {  file: /etc/pihole/setupVars.conf, option: DHCP_END      , value: 192.168.0.50 }
+        - {  file: /etc/pihole/setupVars.conf, option: DHCP_ROUTER   , value: "{{ box_ip_address }}" }
+        - {  file: /etc/pihole/setupVars.conf, option: PIHOLE_DOMAIN , value: skynet }
+      register: pihole_conf 
+         
+    - name: "[Pihole] Restart container (stop)"
+      become_user: pi
+      docker_container:
+        name: pihole
+        state: stopped
+      when: pihole_conf.changed
+
+    - name: "[Pihole] Restart container (start)"
+      become_user: pi
+      docker_container:
+        name: pihole
+        state: started
+      when: pihole_conf.changed

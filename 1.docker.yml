@@ -3,7 +3,7 @@
   become: yes
   gather_facts: false
   tasks:
-  
+
     # Install Docker
     # https://docs.docker.com/install/linux/docker-ce/debian/
     # Docker by apt-get is not compatible with Raspbian
