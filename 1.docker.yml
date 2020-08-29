@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: "[docker]"
+  hosts: localhost
   become: yes
   gather_facts: false
   tasks:
@@ -20,7 +21,7 @@
       register: downloaded
 
 
-    - name: Install Docker
+    - name: Install Docker # noqa 503
       command: sh /tmp/get-docker.sh
       when: downloaded.changed
 
@@ -34,3 +35,9 @@
 
 
     - meta: flush_handlers
+
+  handlers:
+    - name: restart Docker
+      service:
+        name: docker
+        state: restarted

@@ -1,23 +1,24 @@
 ---
 
-- hosts: localhost
+- name: "install_all"
+  hosts: localhost
   become: true
   gather_facts: false
   tasks:
-  
+
 - import_playbook: 0.system_configuration.yml
-  tags: [system_configuration]
+  tags: [install_all, system_configuration]
 
 - import_playbook: 1.docker.yml
-  tags: [docker, pihole]
+  tags: [install_all, docker, pihole]
 
 - import_playbook: 2.pihole.yml
-  tags: [pihole]
+  tags: [install_all, pihole]
 
 - import_playbook: 3.radicale.yml
-  tags: [radicale]
+  tags: [install_all, radicale]
 
 - import_playbook: 4.duplicacy.yml
-  tags: [duplicacy]
+  tags: [install_all, duplicacy]
 
 ...

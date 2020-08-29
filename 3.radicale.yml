@@ -1,11 +1,12 @@
 ---
-- hosts: localhost
+- name: "[radicale]"
+  hosts: localhost
   become: yes
   gather_facts: false
   tasks:
     - name: Add packages prerequisites
       package:
-        name:  apache2-utils
+        name: apache2-utils
         state: present
 
 
@@ -23,7 +24,7 @@
         state: present
         extra_args: --user radicale
 
-    - name: Copy systemd service file (port {{ radicale_port}})
+    - name: Copy systemd service file (port {{ radicale_port }})
       copy:
         src: radicale/radicale.service
         dest: /lib/systemd/system/radicale.service
@@ -33,6 +34,7 @@
         path: "{{ item }}"
         owner: radicale
         group: radicale
+        state: directory
       with_items:
         - /var/log/radicale/
         - /home/radicale/.config/radicale/
@@ -68,5 +70,9 @@
         mode: 0640
       notify: restart Radicale
 
-
-
+  handlers:
+    - name: restart Radicale
+      service:
+        name: radicale
+        enabled: true
+        state: restarted

@@ -1,6 +1,7 @@
 ---
 
-- hosts: localhost
+- name: "[duplicacy]"
+  hosts: localhost
   become: yes
   gather_facts: false
   tasks:
@@ -10,7 +11,7 @@
         dest: /usr/local/bin/duplicacy-web
         mode: 0500
       vars:
-        duplicacy_web_version: 1.2.1
+        duplicacy_web_version: 1.4.1
         os_arch_web: linux_arm # linux_arm osx_x64 linux_x64  freebsd_x64
 
 
@@ -33,9 +34,16 @@
 
     - name: Download Duplicacy CLI
       get_url:
-        url: "https://github.com/gilbertchen/duplicacy/releases/download/v{{ duplicacy_cli_version}}/duplicacy_{{ os_arch_cli }}_{{ duplicacy_cli_version }}"
+        url: "https://github.com/gilbertchen/duplicacy/releases/download/v{{ duplicacy_cli_version }}/duplicacy_{{ os_arch_cli }}_{{ duplicacy_cli_version }}"
         dest: /usr/local/bin/duplicacy
         mode: 0555
       vars:
-        duplicacy_cli_version: 2.5.0
+        duplicacy_cli_version: 2.6.1
         os_arch_cli: linux_arm # linux_arm freebsd_x64 linux_arm64 linux_arm linux_i386 linux_x64 osx_x64
+
+  handlers:
+    - name: restart Duplicacy Web Server
+      service:
+        name: duplicacy
+        enabled: true
+        state: restarted

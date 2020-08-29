@@ -1,0 +1,11 @@
+---
+extends: default
+
+rules:
+  truthy: disable
+  line-length: disable
+  braces:
+    max-spaces-inside: 1
+  comments:
+    require-starting-space: true
+    min-spaces-from-content: 1

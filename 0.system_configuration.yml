@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: "[system_configuration]"
+  hosts: localhost
   become: yes
   gather_facts: false
   tasks:
@@ -13,18 +14,18 @@
         name: "{{ my_timezone }}"
 
 
-    - name: Set localisation files -> '{{my_locale }}'
+    - name: Set localisation files -> '{{ my_locale }}'
       locale_gen:
         name: "{{ my_locale }}"
         state: present
 
-
-    - name: Generate SSH keys if none is present
-      openssh_keypair:
-        path: ~pi/.ssh/id_rsa
-        size: 4096
-        force: no
-        type: rsa
+    # Uncomment if you're using Ansible >= 2.8
+    # - name: Generate SSH keys if none is present
+    #   openssh_keypair:
+    #     path: ~pi/.ssh/id_rsa
+    #     size: 4096
+    #     force: no
+    #     type: rsa
 
 
     - name: Tweak /boot/config.txt
@@ -36,14 +37,14 @@
         backup: yes
         no_extra_spaces: yes
       loop:
-        - { section: '' , option: 'dtparam=i2c_arm' , value: 'off' }
-        - { section: '' , option: 'dtparam=spi' , value: 'off' }
-        - { section: '' , option: 'dtparam=audio' , value: 'on' }
-        - { section: 'all' , option: 'start_x' , value: 0 }
-        - { section: 'all' , option: 'enable_uart' , value: 0 }
-        - { section: 'all' , option: 'gpu_mem' , value: 16 }
+        - { section: '', option: 'dtparam=i2c_arm', value: 'off' }
+        - { section: '', option: 'dtparam=spi', value: 'off' }
+        - { section: '', option: 'dtparam=audio', value: 'on' }
+        - { section: 'all', option: 'start_x', value: 0 }
+        - { section: 'all', option: 'enable_uart', value: 0 }
+        - { section: 'all', option: 'gpu_mem', value: 16 }
 
-    - name: "[system_configuration] Copy /etc/hosts"
+    - name: Copy /etc/hosts
       template:
         src: system_configuration/hosts.j2
         dest: /etc/hosts
@@ -85,3 +86,11 @@
         name: "OS auto updates"
         special_time: weekly
         job: "apt-get -y upgrade"
+
+  handlers:
+    - name: restart network
+      service:
+        name:
+          - dhcpcd
+          - networking
+        state: restarted

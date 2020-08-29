@@ -1,15 +1,7 @@
 # What will be installed ?
 
 Init your raspberry from scratch!  
-If you're interested by only one software, partial installation can be done (see installation section below)
-- install_all.yml             # Install all playbooks below
-- 0.system_configuration.yml  # Basic configuration (IP, keyboard layout, timezone, hostname, network, ...)
-- 1.docker.yml                # Prerequisite to run other apps (Pihole, ...)
-- 2.pihole.yml                # Local DNS, filters advertisements on local network
-- 3.radicale.yml              # Cardav/Caldav, Store contacts and Agenda locally
-- 4.duplicacy.yml             # Backup software, Used to backup any files (Radicale's address book/agendas, pihole settings, ...)
 
-See Installation section for partial installations.
 
 # First
 
@@ -74,15 +66,15 @@ cd init_raspberry
 If you want to change default settings (keyboard layout, IP, password, ports used, Radical initial account/password, ...) please modify files in:  
 - `group_vars/all/`
 
-Then launch global playbook
+If you're interested by only one software, partial installation can be done  
 
 ```shell
-ansible-playbook install_all.yml                               # Install all
-ansible-playbook install_all.yml --tags system_configuration   # Only configure system
-ansible-playbook install_all.yml --tags docker                 # Only install Docker
-ansible-playbook install_all.yml --tags pihole                 # Only install Docker and Pihole
-ansible-playbook install_all.yml --tags radicale               # Only install Radicale
-ansible-playbook install_all.yml --tags duplicacy              # Only install Duplicacy
+ansible-playbook install_all.yml                               # All: Install all playbooks below
+ansible-playbook install_all.yml --tags system_configuration   # Only configure system: Basic configuration (IP, keyboard layout, timezone, hostname, network, ...)
+ansible-playbook install_all.yml --tags docker                 # Only install Docker: Prerequisite to run other apps (Pihole, ...)
+ansible-playbook install_all.yml --tags pihole                 # Only install Docker and Pihole: Local DNS, filters advertisements on local network
+ansible-playbook install_all.yml --tags radicale               # Only install Radicale: Cardav/Caldav, Store contacts and Agenda locally
+ansible-playbook install_all.yml --tags duplicacy              # Only install Duplicacy: Backup software, Used to backup any files (Radicale's address book/agendas, pihole settings, ...)
 ```
 
 Or to use any playbook directly, by example
