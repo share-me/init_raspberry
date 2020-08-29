@@ -1,7 +1,11 @@
 # What will be installed ?
 
-Init your raspberry from scratch!  
+From scratch, configure your raspberry in some seconds!
+Then install Radicale, a Cardav/Caldav server to store your contacts and agendas locally.  
+Then install Duplicacy: a Backup software compatible with cloud services.  
 
+
+```
 
 # First
 
