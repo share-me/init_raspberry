@@ -5,9 +5,8 @@
   gather_facts: false
   tasks:
     - name: Add packages prerequisites
-      package:
+      apt:
         name: apache2-utils
-        state: present
 
 
     - name: Add user 'radicale'
@@ -24,10 +23,12 @@
         state: present
         extra_args: --user radicale
 
+
     - name: Copy systemd service file (port {{ radicale_port }})
       copy:
         src: radicale/radicale.service
         dest: /lib/systemd/system/radicale.service
+
 
     - name: Create directories
       file:
@@ -47,7 +48,9 @@
         dest: /home/radicale/.config/radicale/logs.conf
         owner: radicale
         group: radicale
+        mode: 0600
       notify: restart Radicale
+
 
     - name: Copy main configuration file
       template:
@@ -58,6 +61,7 @@
         mode: 0600
       notify: restart Radicale
 
+
     - name: On Radicale server, add your Cardav/Caldav account ({{ radicale_account_name }})
       htpasswd:
         path: /home/radicale/.config/radicale/users
@@ -66,9 +70,10 @@
         password: "{{ radicale_account_password }}"
         owner: radicale
         group: radicale
-        crypt_scheme: apr_md5_crypt
+        crypt_scheme: bcrypt
         mode: 0640
       notify: restart Radicale
+
 
   handlers:
     - name: restart Radicale

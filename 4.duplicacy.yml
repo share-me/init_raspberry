@@ -38,7 +38,7 @@
         dest: /usr/local/bin/duplicacy
         mode: 0555
       vars:
-        duplicacy_cli_version: 2.6.1
+        duplicacy_cli_version: 2.7.1
         os_arch_cli: linux_arm # linux_arm freebsd_x64 linux_arm64 linux_arm linux_i386 linux_x64 osx_x64
 
   handlers:

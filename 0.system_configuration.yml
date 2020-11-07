@@ -19,13 +19,13 @@
         name: "{{ my_locale }}"
         state: present
 
-    # Uncomment if you're using Ansible >= 2.8
-    # - name: Generate SSH keys if none is present
-    #   openssh_keypair:
-    #     path: ~pi/.ssh/id_rsa
-    #     size: 4096
-    #     force: no
-    #     type: rsa
+
+    - name: Generate SSH keys if none is present
+      openssh_keypair:
+        path: ~pi/.ssh/id_rsa
+        size: 4096
+        force: no
+        type: rsa
 
 
     - name: Tweak /boot/config.txt
@@ -53,7 +53,7 @@
         mode: '0664'
       ignore_errors: true
 
-    - name: Copy Network configuration files
+    - name: Copy /etc/dhcpcd.conf
       template:
         src: system_configuration/dhcpcd.conf
         dest: /etc/dhcpcd.conf

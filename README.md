@@ -43,14 +43,6 @@ sudo apt-get install -y git ansible python3-pip
 
 # Download this Ansible playbook (3 options)
 
-By wget
-
-```shell
-wget https://github.com/share-me/init_raspberry/archive/master.zip
-unzip master.zip
-cd init_raspberry-master
-```
-
 By git https  
 
 ```
@@ -58,12 +50,7 @@ git clone https://github.com/share-me/init_raspberry.git
 cd init_raspberry
 ```
 
-By git ssh  
 
-```
-git clone git@github.com:share-me/init_raspberry.git
-cd init_raspberry
-```
 
 # Installation
 
@@ -73,18 +60,15 @@ If you want to change default settings (keyboard layout, IP, password, ports use
 If you're interested by only one software, partial installation can be done  
 
 ```shell
-ansible-playbook install_all.yml                               # All: Install all playbooks below
-ansible-playbook install_all.yml --tags system_configuration   # Only configure system: Basic configuration (IP, keyboard layout, timezone, hostname, network, ...)
-ansible-playbook install_all.yml --tags docker                 # Only install Docker: Prerequisite to run other apps (Pihole, ...)
-ansible-playbook install_all.yml --tags pihole                 # Only install Docker and Pihole: Local DNS, filters advertisements on local network
-ansible-playbook install_all.yml --tags radicale               # Only install Radicale: Cardav/Caldav, Store contacts and Agenda locally
-ansible-playbook install_all.yml --tags duplicacy              # Only install Duplicacy: Backup software, Used to backup any files (Radicale's address book/agendas, pihole settings, ...)
+ansible-playbook install_all.yml                # All: Install all playbooks below
+ansible-playbook 0.system_configuration.yml     # Only configure system: Basic configuration (IP, keyboard layout, timezone, hostname, network, ...)
+ansible-playbook 1.docker.yml                   # Only install Docker: Prerequisite to run any app in a container
+ansible-playbook 2.pihole.yml                   # Only install Pihole: Local DNS, filters advertisements on local network (Will install Docker too)
+ansible-playbook 3.radicale.yml                 # Only install Radicale: Cardav/Caldav, Store contacts and Agenda locally
+ansible-playbook 4.duplicacy.yml                # Only install Duplicacy: Backup software, Used to backup any files (Radicale's address book/agendas, pihole settings, ...)
 ```
 
-Or to use any playbook directly, by example
-```
-ansible-playbook 2.pihole.yml
-```
+
 
 # Softwares
 
