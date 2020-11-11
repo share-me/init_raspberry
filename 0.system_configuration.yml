@@ -20,30 +20,6 @@
         state: present
 
 
-    - name: Generate SSH keys if none is present
-      openssh_keypair:
-        path: ~pi/.ssh/id_rsa
-        size: 4096
-        force: no
-        type: rsa
-
-
-    - name: Tweak /boot/config.txt
-      ini_file:
-        path: /boot/config.txt
-        section: "{{ item.section }}"
-        option: "{{ item.option }}"
-        value: "{{ item.value }}"
-        backup: yes
-        no_extra_spaces: yes
-      loop:
-        - { section: '', option: 'dtparam=i2c_arm', value: 'off' }
-        - { section: '', option: 'dtparam=spi', value: 'off' }
-        - { section: '', option: 'dtparam=audio', value: 'on' }
-        - { section: 'all', option: 'start_x', value: 0 }
-        - { section: 'all', option: 'enable_uart', value: 0 }
-        - { section: 'all', option: 'gpu_mem', value: 16 }
-
     - name: Copy /etc/hosts
       template:
         src: system_configuration/hosts.j2
@@ -51,15 +27,16 @@
         owner: root
         group: root
         mode: '0664'
-      ignore_errors: true
 
-    - name: Copy /etc/dhcpcd.conf
-      template:
-        src: system_configuration/dhcpcd.conf
-        dest: /etc/dhcpcd.conf
-        owner: root
-        group: netdev
-        mode: '0664'
+
+    - name: Change /etc/dhcpcd.conf
+      blockinfile:
+        path: /etc/dhcpcd.conf
+        block: |
+          interface eth0
+          static ip_address={{ my_ip_address }}/24
+          static routers={{ box_ip_address }}
+          static domain_name_servers={{ dns1 }} {{ dns2 }}
       notify: restart network
 
 
@@ -90,7 +67,8 @@
   handlers:
     - name: restart network
       service:
-        name:
-          - dhcpcd
-          - networking
+        name: "{{ item }}"
         state: restarted
+      with_items:
+        - dhcpcd
+        - networking

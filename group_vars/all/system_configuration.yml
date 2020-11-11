@@ -3,8 +3,8 @@
 box_ip_address: 192.168.0.1
 
 # Raspberry settings
-my_ip_address: 192.168.0.254
+my_ip_address: 192.168.0.42
 my_hostname: jarvis
 my_timezone: Europe/Paris
-my_locale: fr_FR
-my_network_name: skynet
+my_locale: fr_FR.UTF-8
+
