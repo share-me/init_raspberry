@@ -5,39 +5,36 @@
   gather_facts: false
   tasks:
 
+
     # Install Docker
-    # https://docs.docker.com/install/linux/docker-ce/debian/
-    # Docker by apt-get is not compatible with Raspbian
+    # https://docs.docker.com/engine/install/debian/#install-using-the-convenience-script
+    # Docker must be installed by convenient script, then updated by apt
+
 
     - name: Install python docker module
       pip:
         name: docker-py
 
 
+    - name: Gather the package facts
+      package_facts:
+        manager: auto
+
+
     - name: Download Docker install script
       get_url:
         url: https://get.docker.com
         dest: /tmp/get-docker.sh
-      register: downloaded
+      when: "'docker-ce' not in ansible_facts.packages"
 
 
     - name: Install Docker # noqa 503
       command: sh /tmp/get-docker.sh
-      when: downloaded.changed
+      when: "'docker-ce' not in ansible_facts.packages"
 
 
-    - name: Add the user 'pi' to docker group
-      user:
-        name: pi
-        groups: docker
-        append: yes
-      notify: restart Docker
-
-
-    - meta: flush_handlers
-
-  handlers:
-    - name: restart Docker
-      service:
-        name: docker
-        state: restarted
+    - name: Upgrade Docker
+      apt:
+        name: docker-ce
+        only_upgrade: yes
+        state: latest

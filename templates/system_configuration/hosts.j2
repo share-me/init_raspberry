@@ -1,4 +1,7 @@
-127.0.0.1       localhost  {{ my_hostname }}
+127.0.0.1       localhost  
 ::1             localhost ip6-localhost ip6-loopback
 ff02::1         ip6-allnodes
 ff02::2         ip6-allrouters
+
+{{ my_ip_address }}       {{ my_hostname }} {{ my_hostname }}.{{ my_network_name }}
+{{ box_ip_address }}       box

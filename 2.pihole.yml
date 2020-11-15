@@ -6,11 +6,11 @@
   gather_facts: false
   tasks:
 
-    - name: create a pihole container on port 80
+    - name: Create a pihole container on port 80
       docker_container:
         name: pihole
         image: pihole/pihole:latest
-        state: stopped
+        state: started
         env:
           TZ: "{{ my_timezone }}"
           DNS1: "{{ dns1 }}"
@@ -33,6 +33,7 @@
         network_mode: host
         restart_policy: 'unless-stopped'
 
+
     - name: Change pihole settings
       ini_file:
         path: "{{ item.file }}"
@@ -45,16 +46,16 @@
         - { file: /etc/pihole/setupVars.conf, option: PIHOLE_DNS_1, value: "{{ dns1 }}" }
         - { file: /etc/pihole/setupVars.conf, option: PIHOLE_DNS_2, value: "{{ dns2 }}" }
         - { file: /etc/pihole/setupVars.conf, option: IPV4_ADDRESS, value: "{{ my_ip_address }}" }
-        - { file: /etc/pihole/setupVars.conf, option: DHCP_START, value: 192.168.0.2 }
-        - { file: /etc/pihole/setupVars.conf, option: DHCP_END, value: 192.168.0.50 }
         - { file: /etc/pihole/setupVars.conf, option: DHCP_ROUTER, value: "{{ box_ip_address }}" }
-        - { file: /etc/pihole/setupVars.conf, option: PIHOLE_DOMAIN, value: {{ my_network_name }} }
+        - { file: /etc/pihole/setupVars.conf, option: PIHOLE_DOMAIN, value: "{{ my_network_name }}" }
+        - { file: /etc/pihole/setupVars.conf, option: WEBPASSWORD, value: "" }
       register: pihole_conf
 
+
     - name: "[Pihole] Restart container" # noqa 503
-      become_user: pi
       docker_container:
         name: pihole
         state: started
         restart: yes
       when: pihole_conf.changed
+

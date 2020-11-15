@@ -14,6 +14,3 @@ hosts = {{ my_ip_address }}:{{ radicale_port }}
 max_connections = 2
 max_content_length = 10000000 
 timeout = 10 
-
-[logging] 
-config = ~/.config/radicale/logs.conf

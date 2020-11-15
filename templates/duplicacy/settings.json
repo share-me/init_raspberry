@@ -1,4 +1,5 @@
 {
     "listening_address": "{{ my_ip_address }}:{{ duplicacy_port }}",
+    "log_directory": "/var/log/duplicacy/",
     "dark_mode": false
 }

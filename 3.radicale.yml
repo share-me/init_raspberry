@@ -6,20 +6,27 @@
   tasks:
     - name: Add packages prerequisites
       apt:
-        name: apache2-utils
+        name:
+          - apache2-utils
+          - python3
+          - python3-pip
 
 
-    - name: Add user 'radicale'
+    - name: Add OS user 'radicale'
       user:
         name: radicale
-        password: $6$mysecretsalt$9nQl7uSP.U5lQhRu/ZcCf/abvxUnWvDZMrTrbXMpXmQoA5gDmd4DYkIs/4gu5imDCD.UkGQG84jaSLhVeU8/C0
+        password: $6$mysecretsalt$9nQl7uSP.U5lQhRu/ZcCf/abvxUnWvDZMrTrbXMpXmQoA5gDmd4DYkIs/4gu5imDCD.UkGQG84jaSLhVeU8/C0 # = radicale
         uid: 1001
         shell: /bin/bash
 
 
     - name: Install Radicale application
       pip:
-        name: ['radicale', 'radicale[bcrypt]', 'passlib[bcrypt]']
+        name:
+          - radicale
+          - radicale[bcrypt]
+          - passlib[bcrypt]
+        executable: pip3
         state: present
         extra_args: --user radicale
 
@@ -42,16 +49,6 @@
         - /home/radicale/.config/systemd/user/
 
 
-    - name: Copy logging configuration
-      copy:
-        src: radicale/logs.conf
-        dest: /home/radicale/.config/radicale/logs.conf
-        owner: radicale
-        group: radicale
-        mode: 0600
-      notify: restart Radicale
-
-
     - name: Copy main configuration file
       template:
         src: radicale/config
@@ -62,7 +59,7 @@
       notify: restart Radicale
 
 
-    - name: On Radicale server, add your Cardav/Caldav account ({{ radicale_account_name }})
+    - name: Add '{{ radicale_account_name }}' account on your Radicale server
       htpasswd:
         path: /home/radicale/.config/radicale/users
         name: "{{ radicale_account_name }}"

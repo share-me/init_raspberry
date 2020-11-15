@@ -5,7 +5,7 @@
   become: yes
   gather_facts: false
   tasks:
-    - name: Download Duplicacy Web Server
+    - name: Download Duplicacy Web Server (trial)
       get_url:
         url: "https://acrosync.com/duplicacy-web/duplicacy_web_{{ os_arch_web }}_{{ duplicacy_web_version }}"
         dest: /usr/local/bin/duplicacy-web
@@ -13,6 +13,15 @@
       vars:
         duplicacy_web_version: 1.4.1
         os_arch_web: linux_arm # linux_arm osx_x64 linux_x64  freebsd_x64
+
+
+    - name: Create directories
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - /var/log/radicale/
+        - ~/.duplicacy-web/
 
 
     - name: Copy configuration files
@@ -24,7 +33,7 @@
         mode: '0600'
 
 
-    - name: Create Duplicacy service file (port {{ duplicacy_port }})
+    - name: Create Duplicacy service (port {{ duplicacy_port }})
       copy:
         src: duplicacy/duplicacy.service
         dest: /etc/systemd/system/
@@ -40,6 +49,7 @@
       vars:
         duplicacy_cli_version: 2.7.1
         os_arch_cli: linux_arm # linux_arm freebsd_x64 linux_arm64 linux_arm linux_i386 linux_x64 osx_x64
+
 
   handlers:
     - name: restart Duplicacy Web Server

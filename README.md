@@ -1,6 +1,6 @@
 # What will be installed ?
 
-From scratch, configure your raspberry in some seconds!
+From scratch, configure your Raspberry in some seconds!
 Then install Radicale, a Cardav/Caldav server to store your contacts and agendas locally.  
 Then install Duplicacy: a Backup software compatible with cloud services.  
 
@@ -125,13 +125,12 @@ passwd
 ```
 
 
-If you didn't change default Radicale account in settings  
-Create your account (my_new_account) and delete default one (radicale)
+If you forget to change default Radicale account in group_vars/all/radicale.yml  
+You can delete it with
 
 ```shell
-su - radicale
+sudo su - radicale
 file=/home/radicale/.config/radicale/users
-htpasswd -B $file my_new_account
 htpasswd -D $file radicale
 ```
 

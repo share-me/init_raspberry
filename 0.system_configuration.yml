@@ -62,7 +62,7 @@
       cron:
         name: "OS auto updates"
         special_time: weekly
-        job: "apt-get -y upgrade"
+        job: "apt-get -y full-upgrade"
 
   handlers:
     - name: restart network

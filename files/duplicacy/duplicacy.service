@@ -1,5 +1,5 @@
 [Unit]
-Description=Duplicacy backup software`
+Description=Duplicacy backup software
 
 [Service]
 ExecStart=/usr/local/bin/duplicacy-web
