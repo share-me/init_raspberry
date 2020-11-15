@@ -18,7 +18,7 @@ default_ip=192.168.$(echo $default_gw|cut -d'.' -f3).42
 
 echo -n "Type your Raspberry name: "
 read name
-name=$(echo $name | tr '[:upper:]' '[:lower:]')
+name=$(echo $name | tr -d ' ' | tr '[:upper:]' '[:lower:]')
 if [ -z "$default_gw" -o -z "$default_ip" -o -z "$name" ] ; then
 	echo "Something goes wrong. Stop"
 	exit 1
